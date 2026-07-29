@@ -1,0 +1,6 @@
+{
+  "name": "Cyber Tech",
+  "description": "Secure, fast VLESS Reality VPN client with real-time speed display and cyberpunk dark theme.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
