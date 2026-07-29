@@ -15,7 +15,7 @@ class VpnViewModel(application: Application) : AndroidViewModel(application) {
 
     val servers: StateFlow<List<VpnServer>>
     val recentLogs: StateFlow<List<ConnectionLog>>
-    val totalStats: StateFlow<UsageStats?>
+    val totalStats: StateFlow<UsageStats>
 
     private val _selectedServerId = MutableStateFlow<Long?>(null)
 
@@ -58,7 +58,7 @@ class VpnViewModel(application: Application) : AndroidViewModel(application) {
         totalStats = repository.totalStats.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null
+            initialValue = UsageStats(0.0, 0.0, 0)
         )
 
         selectedServer = combine(servers, _selectedServerId) { serverList, id ->

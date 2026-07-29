@@ -16,7 +16,7 @@ android {
 
 
   defaultConfig {
-    applicationId = "com.aistudio.cybertech.vpn"
+    applicationId = "com.cybertech.vpn"
     minSdk = 24
     targetSdk = 35
     versionCode = 1

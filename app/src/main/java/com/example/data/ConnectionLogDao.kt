@@ -20,8 +20,8 @@ interface ConnectionLogDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLog(log: ConnectionLog)
 
-    @Query("SELECT SUM(downloadMb) AS totalDownloadMb, SUM(uploadMb) AS totalUploadMb, SUM(durationSeconds) AS totalDurationSec FROM connection_logs")
-    fun getTotalStats(): Flow<UsageStats?>
+    @Query("SELECT COALESCE(SUM(downloadMb), 0.0) AS totalDownloadMb, COALESCE(SUM(uploadMb), 0.0) AS totalUploadMb, COALESCE(SUM(durationSeconds), 0) AS totalDurationSec FROM connection_logs")
+    fun getTotalStats(): Flow<UsageStats>
 
     @Query("DELETE FROM connection_logs")
     suspend fun clearLogs()

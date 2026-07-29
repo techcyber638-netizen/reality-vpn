@@ -7,7 +7,7 @@ class VpnRepository(private val db: AppDatabase) {
 
     val allServers: Flow<List<VpnServer>> = db.vpnServerDao().getAllServers()
     val recentLogs: Flow<List<ConnectionLog>> = db.connectionLogDao().getRecentLogs()
-    val totalStats: Flow<UsageStats?> = db.connectionLogDao().getTotalStats()
+    val totalStats: Flow<UsageStats> = db.connectionLogDao().getTotalStats()
 
     suspend fun insertServer(server: VpnServer): Long = db.vpnServerDao().insertServer(server)
 
