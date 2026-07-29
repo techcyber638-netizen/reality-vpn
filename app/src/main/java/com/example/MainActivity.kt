@@ -56,7 +56,9 @@ class MainActivity : ComponentActivity() {
                 var showLogViewer by remember { mutableStateOf(false) }
 
                 if (isSplashActive) {
-                    SplashScreen(onSplashFinished = { isSplashActive = false })
+                    SplashScreen(onSplashFinished = { 
+                        if (isSplashActive) isSplashActive = false 
+                    })
                 } else {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()

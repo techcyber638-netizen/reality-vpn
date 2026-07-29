@@ -26,7 +26,7 @@ class VpnRepository(private val db: AppDatabase) {
     suspend fun clearLogs() = db.connectionLogDao().clearLogs()
 
     suspend fun seedInitialServersIfEmpty() {
-        val current = allServers.first()
+        val current = try { allServers.first() } catch (e: Exception) { emptyList<VpnServer>() }
         if (current.isEmpty()) {
             val seeds = listOf(
                 VpnServer(

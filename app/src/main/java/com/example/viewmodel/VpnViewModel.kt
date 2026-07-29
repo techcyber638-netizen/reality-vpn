@@ -43,23 +43,29 @@ class VpnViewModel(application: Application) : AndroidViewModel(application) {
         val db = AppDatabase.getDatabase(application)
         repository = VpnRepository(db)
 
-        servers = repository.allServers.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        servers = repository.allServers
+            .catch { emit(emptyList()) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = emptyList()
+            )
 
-        recentLogs = repository.recentLogs.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        recentLogs = repository.recentLogs
+            .catch { emit(emptyList()) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = emptyList()
+            )
 
-        totalStats = repository.totalStats.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = UsageStats(0.0, 0.0, 0)
-        )
+        totalStats = repository.totalStats
+            .catch { emit(UsageStats(0.0, 0.0, 0)) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = UsageStats(0.0, 0.0, 0)
+            )
 
         selectedServer = combine(servers, _selectedServerId) { serverList, id ->
             if (id != null) {
@@ -69,12 +75,16 @@ class VpnViewModel(application: Application) : AndroidViewModel(application) {
             }
         }.stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Eagerly,
             initialValue = null
         )
 
         viewModelScope.launch {
-            repository.seedInitialServersIfEmpty()
+            try {
+                repository.seedInitialServersIfEmpty()
+            } catch (e: Exception) {
+                VpnEngine.log("Failed to seed servers: ${e.message}")
+            }
         }
     }
 
