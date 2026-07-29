@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
                 if (isSplashActive) {
                     SplashScreen(onSplashFinished = { 
-                        if (isSplashActive) isSplashActive = false 
+                        isSplashActive = false 
                     })
                 } else {
                     val navController = rememberNavController()
